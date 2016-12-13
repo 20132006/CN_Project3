@@ -13,31 +13,17 @@
 #include <time.h>
 #include <stdbool.h>
 #include <sys/time.h>
-#include <netinet/in.h>
 #include <net/ethernet.h>
 #include <pcap/pcap.h>
 #include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include<sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <netinet/ip_icmp.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h> /* for strncpy */
-#include<pthread.h>
-#include <sys/types.h>
-#include <sys/socket.h>
+#include <pthread.h>
 #include <sys/ioctl.h>
-#include <netinet/in.h>
 #include <net/if.h>
-#include <arpa/inet.h>
 
 int sock, connected;
 int bytes_recieved , true_ = 1;
@@ -71,9 +57,9 @@ void *connection_handler(void *unused)
     return 0;
 }
 
-int main()
+int main(int argc, char** argv)
 {
-
+    int host_port = atoi(argv[1]);
     pthread_t thread_id;
     struct sockaddr_in server_addr,client_addr;
     int sin_size;
@@ -91,7 +77,7 @@ int main()
     }
 
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(5000);
+    server_addr.sin_port = htons(host_port);
     server_addr.sin_addr.s_addr = INADDR_ANY;
     bzero(&(server_addr.sin_zero),8);
 
