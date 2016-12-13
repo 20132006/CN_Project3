@@ -96,7 +96,6 @@ void sendList() {
     //start from the beginning
     while(ptr != NULL)
     {
-        pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
         if (strcmp(required_filer , "filter:all") == 0)
         {
             storeData(ptr->src1);send_data[++ind] = '.';
@@ -139,7 +138,6 @@ void sendList() {
             storeData(ptr->dst4);send_data[++ind] = ':';
             storeData(ptr->data);send_data[++ind] = '\n';
         }
-        pthread_mutex_unlock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
         printf("(%d.%d.%d.%d) ->",ptr->src1,ptr->src2,ptr->src3,ptr->src4);
         printf("(%d.%d.%d.%d) : %d\n",ptr->dst1,ptr->dst2,ptr->dst3,ptr->dst4,ptr->data);
         ptr = ptr->next;
@@ -378,7 +376,7 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
             src2[k] = (src2[k] * 10) + (dest[i]-48);
         }
     }
-
+    pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
     double clock_time = clock();
     if (first_update)
     {
@@ -387,9 +385,9 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
     }
     else if (!first_update)
     {
-        double time_spent = (double)(clock_time - last_update) / CLOCKS_PER_SEC;
+        double time_spent = (double)(clock_time - last_update);
         printf("%f\n", time_spent);
-        if (time_spent > 60)
+        if (time_spent >= 60000000)
         {
             sendList();
             while (!isEmpty())
@@ -412,6 +410,7 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
         printf("temp is NULL and we are adding data\n");
         insertFirst(src1[0],src1[1],src1[2],src1[3],src2[0],src2[1],src2[2],src2[3],0);
     }
+    pthread_mutex_unlock(&sendReceiveMutex);/*                                  unlock and check requred_filer*/
     if (!res || !res1)
     {
         printf("Version     : %u\n", iph->ip_v );
@@ -616,11 +615,25 @@ int main(int argc, char** argv)
     server_addr.sin_addr = *((struct in_addr *)host->h_addr);
     bzero(&(server_addr.sin_zero),8);
 
+
+
     if (connect(sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1)
     {
         perror("Connect");
         exit(1);
     }
+
+    required_filer = (char *)malloc(40*sizeof(char));
+    //memseit(src, '\0',sizeof(src));
+    strcpy(required_filer,"filter:all");
+
+    if (pthread_mutex_init(&sendReceiveMutex, NULL) != 0)
+    {
+        printf("\n mutex init failed\n");
+        return 1;
+    }
+
+
     if( pthread_create( &idPcapThread , NULL ,  pcap , NULL) < 0)
     {
         perror("could not create thread");
@@ -631,15 +644,7 @@ int main(int argc, char** argv)
         perror("could not create thread");
         return 1;
     }
-    required_filer = (char *)malloc(40*sizeof(char));
-    //memseit(src, '\0',sizeof(src));
-    strcpy(required_filer,"filter:all");
 
-    if (pthread_mutex_init(&sendReceiveMutex, NULL) != 0)
-    {
-        printf("\n mutex init failed\n");
-        return 1;
-    }
 
     pthread_join(idPcapThread, NULL);
     pthread_join(idConnectionThread, NULL);
