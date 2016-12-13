@@ -154,7 +154,7 @@ void sendList() {
         printf("(%d.%d.%d.%d) : %d\n",ptr->dst1,ptr->dst2,ptr->dst3,ptr->dst4,ptr->data);
         ptr = ptr->next;
     }
-    printf("Seding Data : \n %s" send_data);
+    printf("Seding Data : \n %s", send_data);
     send(sock,send_data,strlen(send_data), 0);
 
 }
