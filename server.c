@@ -1,15 +1,43 @@
 /* Creates a datagram server. The port number is passed as an argument. This server runs forever */
 /* tcpserver.c */
 
-#include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
+#include <netdb.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <time.h>
+#include <stdbool.h>
+#include <sys/time.h>
+#include <netinet/in.h>
+#include <net/ethernet.h>
+#include <pcap/pcap.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <errno.h>
+#include <unistd.h>
+#include<sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h> /* for strncpy */
+#include<pthread.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <arpa/inet.h>
 
 int sock, connected;
 int bytes_recieved , true_ = 1;
@@ -34,9 +62,9 @@ void *connection_handler(void *unused)
 
         else
         {
-            printf("---------------------------------------------------------\n", );
+            printf("---------------------------------------------------------\n");
             printf("%s",recv_data);
-            printf("---------------------------------------------------------\n\n", );
+            printf("---------------------------------------------------------\n\n");
         }
     }
     fflush(stdout);
@@ -46,7 +74,7 @@ void *connection_handler(void *unused)
 int main()
 {
 
-
+    pthread_t thread_id;
     struct sockaddr_in server_addr,client_addr;
     int sin_size;
 

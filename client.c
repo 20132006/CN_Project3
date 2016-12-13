@@ -9,17 +9,44 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
-#include <<time.h>>
+#include <time.h>
+#include <stdbool.h>
+#include <sys/time.h>
+#include <netinet/in.h>
+#include <net/ethernet.h>
+#include <pcap/pcap.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <unistd.h>
+#include<sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h> /* for strncpy */
+#include<pthread.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <arpa/inet.h>
 
 double last_update=0.0;
-bool first_update = true;
+int first_update = 1;
 char *required_filer;
 int required_IP[4];
 int sock;
 char send_data[2048];
 char recv_data[1024];
 
-int index;
+int ind;
 pthread_mutex_t sendReceiveMutex;
 
 //Linked list implementation
@@ -55,16 +82,14 @@ void storeData(int num)
     --k;
     for (;k>=0;k--)
     {
-        send_data[++index] = temp[k];
+        send_data[++ind] = temp[k];
     }
 }
 
 //display the list
 void sendList() {
 
-    index = 0;
-    //memseit(src, '\0',sizeof(src));
-    strcpy(src,inet_ntoa(iph->ip_src));
+    ind = 0;
     struct node *ptr = head;
 
     memset(send_data, 0, sizeof (send_data));;
@@ -74,29 +99,29 @@ void sendList() {
         pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
         if (strcmp(required_filer , "filter:all") == 0)
         {
-            storeData(ptr->src1);send_data[++index] = '.';
-            storeData(ptr->src2);send_data[++index] = '.';
-            storeData(ptr->src3);send_data[++index] = '.';
-            storeData(ptr->src4);send_data[++index] = '-';send_data[++index] = '>';
-            storeData(ptr->dst1);send_data[++index] = '.';
-            storeData(ptr->dst2);send_data[++index] = '.';
-            storeData(ptr->dst3);send_data[++index] = '.';
-            storeData(ptr->dst4);send_data[++index] = ':';
-            storeData(ptr->data);send_data[++index] = '\n';
+            storeData(ptr->src1);send_data[++ind] = '.';
+            storeData(ptr->src2);send_data[++ind] = '.';
+            storeData(ptr->src3);send_data[++ind] = '.';
+            storeData(ptr->src4);send_data[++ind] = '-';send_data[++ind] = '>';
+            storeData(ptr->dst1);send_data[++ind] = '.';
+            storeData(ptr->dst2);send_data[++ind] = '.';
+            storeData(ptr->dst3);send_data[++ind] = '.';
+            storeData(ptr->dst4);send_data[++ind] = ':';
+            storeData(ptr->data);send_data[++ind] = '\n';
         }
         else if (strcmp(required_filer , "filter:star") == 0 &&
         (ptr->src1 == required_IP[0] && ptr->src3 == required_IP[1] && ptr->src3 == required_IP[2]) ||
         (ptr->dst1 == required_IP[0] && ptr->dst2 == required_IP[1] && ptr->dst3 == required_IP[2]) )
         {
-            storeData(ptr->src1);send_data[++index] = '.';
-            storeData(ptr->src2);send_data[++index] = '.';
-            storeData(ptr->src3);send_data[++index] = '.';
-            storeData(ptr->src4);send_data[++index] = '-';send_data[++index] = '>';
-            storeData(ptr->dst1);send_data[++index] = '.';
-            storeData(ptr->dst2);send_data[++index] = '.';
-            storeData(ptr->dst3);send_data[++index] = '.';
-            storeData(ptr->dst4);send_data[++index] = ':';
-            storeData(ptr->data);send_data[++index] = '\n';
+            storeData(ptr->src1);send_data[++ind] = '.';
+            storeData(ptr->src2);send_data[++ind] = '.';
+            storeData(ptr->src3);send_data[++ind] = '.';
+            storeData(ptr->src4);send_data[++ind] = '-';send_data[++ind] = '>';
+            storeData(ptr->dst1);send_data[++ind] = '.';
+            storeData(ptr->dst2);send_data[++ind] = '.';
+            storeData(ptr->dst3);send_data[++ind] = '.';
+            storeData(ptr->dst4);send_data[++ind] = ':';
+            storeData(ptr->data);send_data[++ind] = '\n';
         }
         else if (strcmp(required_filer , "filter:full") == 0 &&
         (ptr->src1 == required_IP[0] && ptr->src3 == required_IP[1] &&
@@ -104,15 +129,15 @@ void sendList() {
         (ptr->dst1 == required_IP[0] && ptr->dst2 == required_IP[1] &&
           ptr->dst3 == required_IP[2] && ptr->dst4 == required_IP[3]) )
         {
-            storeData(ptr->src1);send_data[++index] = '.';
-            storeData(ptr->src2);send_data[++index] = '.';
-            storeData(ptr->src3);send_data[++index] = '.';
-            storeData(ptr->src4);send_data[++index] = '-';send_data[++index] = '>';
-            storeData(ptr->dst1);send_data[++index] = '.';
-            storeData(ptr->dst2);send_data[++index] = '.';
-            storeData(ptr->dst3);send_data[++index] = '.';
-            storeData(ptr->dst4);send_data[++index] = ':';
-            storeData(ptr->data);send_data[++index] = '\n';
+            storeData(ptr->src1);send_data[++ind] = '.';
+            storeData(ptr->src2);send_data[++ind] = '.';
+            storeData(ptr->src3);send_data[++ind] = '.';
+            storeData(ptr->src4);send_data[++ind] = '-';send_data[++ind] = '>';
+            storeData(ptr->dst1);send_data[++ind] = '.';
+            storeData(ptr->dst2);send_data[++ind] = '.';
+            storeData(ptr->dst3);send_data[++ind] = '.';
+            storeData(ptr->dst4);send_data[++ind] = ':';
+            storeData(ptr->data);send_data[++ind] = '\n';
         }
         pthread_mutex_unlock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
         printf("(%d.%d.%d.%d) ->",ptr->src1,ptr->src2,ptr->src3,ptr->src4);
@@ -267,7 +292,7 @@ struct node* delete(int src1, int src2, int src3, int src4,
 
 #define SNAP_LEN 1518
 
-truct arg_struct{
+struct arg_struct{
     //passing argument struct
     int numberOfPackets;
     char *filtering_rule;
@@ -357,7 +382,8 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
     double clock_time = clock();
     if (first_update)
     {
-        last_update = clock_time
+        last_update = clock_time;
+        first_update = 0;
     }
     else if (!first_update)
     {
@@ -374,7 +400,7 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
         }
 
     }
-    node *temp;
+    struct node *temp;
     temp = find(src1[0],src1[1],src1[2],src1[3],src2[0],src2[1],src2[2],src2[3]);
     if (temp != NULL)
     {
@@ -402,12 +428,13 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
 
 
 
+int num_packets;			/* number of packets to capture */
+char *filter_exp;		/* filter expression [3] */
 
-
-void *pcap(void *arguments)
+void *pcap(void *unused)
 {
-    struct arg_struct *argum;
-    argum  = (struct arg_struct *) arguments;
+    //struct arg_struct *argum;
+    //argum  = (struct arg_struct *) arguments;
 
     char *dev = NULL;
     bpf_u_int32 net;
@@ -425,8 +452,7 @@ void *pcap(void *arguments)
 
     pcap_t *pcd;
   //added by Alibek
-    int num_packets = atoi(argv[1]);			/* number of packets to capture */
-    char *filter_exp = argv[2];		/* filter expression [3] */
+
     pcap_t *handle;				/* packet capture handle */
 
 
@@ -506,11 +532,11 @@ void get_requirements()
     ++i;
     if (recv_data[i]=='*')
     {
-        strcpy(requred_filer,"filter:star");
+        strcpy(required_filer,"filter:star");
     }
     else
     {
-        strcpy(requred_filer,"filter:full");
+        strcpy(required_filer,"filter:full");
         required_IP[k]=0;
         while (i<len)
         {
@@ -559,15 +585,21 @@ void *connection_handler(void *unused)
     }
 }
 
-int main()
+int main(int argc, char** argv)
 {
+    num_packets = atoi(argv[1]);			/* number of packets to capture */
+    filter_exp = argv[2];		/* filter expression [3] */
+
     int bytes_recieved;
     char recv_data[1024];
     struct hostent *host;
+    char *host_name = argv[3];
+    int host_port = atoi(argv[4]);
     struct sockaddr_in server_addr;
-    pthread_t thread_id;
+    pthread_t idPcapThread;
+    pthread_t idConnectionThread;
 
-    host = gethostbyname("127.0.0.1");
+    host = gethostbyname(host_name/*"127.0.0.1"*/);
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1){
         perror("Socket");
@@ -575,7 +607,7 @@ int main()
     }
 
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(5000);
+    server_addr.sin_port = htons(host_port);
     server_addr.sin_addr = *((struct in_addr *)host->h_addr);
     bzero(&(server_addr.sin_zero),8);
 
@@ -584,7 +616,12 @@ int main()
         perror("Connect");
         exit(1);
     }
-    if( pthread_create( &thread_id , NULL ,  connection_handler , NULL) < 0)
+    if( pthread_create( &idPcapThread , NULL ,  pcap , NULL) < 0)
+    {
+        perror("could not create thread");
+        return 1;
+    }
+    if( pthread_create( &idConnectionThread , NULL ,  connection_handler , NULL) < 0)
     {
         perror("could not create thread");
         return 1;
