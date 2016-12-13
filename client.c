@@ -543,7 +543,6 @@ void get_requirements()
     {
         i++;
     }
-    i++;
     int k;
     for (k=0;k<3;k++)
     {
