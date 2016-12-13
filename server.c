@@ -31,11 +31,12 @@ char send_data [1024] , recv_data[2048];
 /*
  * This will handle connection for each client
  * */
-void *connection_handler(void *unused)
+void *Rhandler(void *unused)
 {
     //Get the socket descriptor
     while (1)
     {
+        printf("Start receiving\n");
         bytes_recieved = recv(connected,recv_data,2048,0);
 
         recv_data[bytes_recieved] = '\0';
@@ -52,15 +53,38 @@ void *connection_handler(void *unused)
             printf("%s",recv_data);
             printf("---------------------------------------------------------\n\n");
         }
+        fflush(stdout);
     }
-    fflush(stdout);
+    return 0;
+}
+
+void *Shandler(void *unused)
+{
+    //Get the socket descriptor
+    while (1)
+    {
+        printf("\n SEND (q or Q to quit) : ");
+        gets(send_data);
+
+        if (strcmp(send_data , "q") == 0 || strcmp(send_data , "Q") == 0)
+        {
+            send(connected, send_data,strlen(send_data), 0);
+            close(connected);
+            break;
+        }
+
+        else
+           send(connected, send_data,strlen(send_data), 0);
+        fflush(stdout);
+    }
     return 0;
 }
 
 int main(int argc, char** argv)
 {
     int host_port = atoi(argv[1]);
-    pthread_t thread_id;
+    pthread_t thread_idR;
+    pthread_t thread_idS;
     struct sockaddr_in server_addr,client_addr;
     int sin_size;
 
@@ -97,17 +121,27 @@ int main(int argc, char** argv)
     fflush(stdout);
 
 
-    while(1)
+    //while(1)
     {
         sin_size = sizeof(struct sockaddr_in);
         connected = accept(sock, (struct sockaddr *)&client_addr,&sin_size);
         printf("\n I got a connection from (%s , %d)",inet_ntoa(client_addr.sin_addr),ntohs(client_addr.sin_port));
 
-        if( pthread_create( &thread_id , NULL ,  connection_handler , NULL) < 0)
+        if( pthread_create( &thread_idR , NULL ,  Rhandler , NULL) < 0)
         {
           perror("could not create thread");
           return 1;
         }
+
+        if( pthread_create( &thread_idS , NULL ,  Shandler , NULL) < 0)
+        {
+          perror("could not create thread");
+          return 1;
+        }
+
+        pthread_join(thread_idS,NULL);
+        pthread_join(thread_idR,NULL);
+        /*
         while (1)
         {
             printf("\n SEND (q or Q to quit) : ");
@@ -125,6 +159,7 @@ int main(int argc, char** argv)
 
             fflush(stdout);
         }
+        */
     }
 
     close(sock);
