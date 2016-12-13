@@ -77,7 +77,7 @@ void storeData(int num)
     char temp[30];
     while (num>0)
     {
-        temp[++k] = char((num%10)+48);
+        temp[++k] = (num%10)+48;
         num/=10;
     }
     --k;
