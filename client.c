@@ -72,6 +72,7 @@ struct node *current = NULL;
 
 void storeData(int num)
 {
+    printf("Storing DATA\n");
     int k=0;
     char temp[30];
     while (num>0)
@@ -84,6 +85,8 @@ void storeData(int num)
     {
         send_data[++ind] = temp[k];
     }
+    printf("temp data %s\n", temp);
+    printf("send_data data %s\n", send_data);
 }
 
 //display the list

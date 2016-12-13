@@ -45,21 +45,20 @@ int main(int argc, char** argv)
     bool first_update = true;
     double last_update;
     double clock_time;
-
-    while (1)
+    char send_data[2048];
+    memset(send_data, 0, sizeof (send_data));;
+    int i,n=10,len;
+    for (i=0;i<n;i++)
     {
-        clock_time = clock();
-        if (first_update)
-        {
-            last_update = clock_time;
-            first_update = false;
-            printf("%f\n", clock_time);
-        }
-        else if (!first_update && clock_time - last_update >= 60000000)
-        {
-            printf("%f\n", clock_time);
-            last_update = clock_time;
-        }
+        send_data[i] = '1';
     }
+    send_data[i] = '\n';
+    i++;
+    for (;i<n+n+1;i++)
+    {
+        send_data[i] = '1';
+    }
+    printf("%s\n", send_data);
+
     return 0;
 }
