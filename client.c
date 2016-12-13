@@ -555,6 +555,7 @@ void get_requirements()
             required_IP[k] = required_IP[k]*10 + (recv_data[i]-48);
             i++;
         }
+        i++;
     }
     ++i;
     if (recv_data[i]=='*')
