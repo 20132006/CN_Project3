@@ -558,13 +558,14 @@ void *connection_handler(void *unused)
         bytes_recieved=recv(sock,recv_data,1024,0);
         recv_data[bytes_recieved] = '\0';
 
+        printf("Bytes Received : %d", bytes_recieved);
+        printf("Data Received : %s", recv_data);
+
         if (strcmp(recv_data , "q") == 0 || strcmp(recv_data , "Q") == 0)
         {
             close(sock);
             break;
         }
-        printf("Bytes Received : %d", bytes_recieved);
-        printf("Data Received : %s", recv_data);
         else if (bytes_recieved != 0)
         {
             pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
