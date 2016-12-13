@@ -635,6 +635,10 @@ int main(int argc, char** argv)
         printf("\n mutex init failed\n");
         return 1;
     }
+
+    pthread_join(idPcapThread, NULL);
+    pthread_join(idConnectionThread, NULL);
+
     /*
     while(1)
     {
@@ -664,5 +668,6 @@ int main(int argc, char** argv)
         }
     }
     */
+    pthread_join();
     return 0;
 }
