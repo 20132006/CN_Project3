@@ -399,7 +399,7 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
     {
         double time_spent = (double)(clock_time - last_update);
         printf("%f\n", time_spent);
-        if (time_spent >= 30000)
+        if (time_spent >= 10000)
         {
             sendList();
             while (!isEmpty())
