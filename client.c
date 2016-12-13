@@ -90,7 +90,7 @@ void storeData(int num)
     printf("Integer K : %d\n", k);
     for (i=0;i < k;i++)
     {
-        send_data[ind] = temp[i];
+        send_data[ind] = temp[k-i-1];
         printf("%c\n", send_data[ind]);
         ind++;
     }
@@ -123,29 +123,29 @@ void sendList() {
     {
         if (strcmp(required_filer , "filter:all") == 0)
         {
-            storeData(ptr->src1);send_data[++ind] = '.';
-            storeData(ptr->src2);send_data[++ind] = '.';
-            storeData(ptr->src3);send_data[++ind] = '.';
-            storeData(ptr->src4);send_data[++ind] = '-';send_data[++ind] = '>';
-            storeData(ptr->dst1);send_data[++ind] = '.';
-            storeData(ptr->dst2);send_data[++ind] = '.';
-            storeData(ptr->dst3);send_data[++ind] = '.';
-            storeData(ptr->dst4);send_data[++ind] = ':';
-            storeData(ptr->data);send_data[++ind] = '\n';
+            storeData(ptr->src1);send_data[ind] = '.'; ind++;
+            storeData(ptr->src2);send_data[ind] = '.';ind++;
+            storeData(ptr->src3);send_data[ind] = '.';ind++;
+            storeData(ptr->src4);send_data[ind] = '-';ind++;send_data[ind] = '>';ind++;
+            storeData(ptr->dst1);send_data[ind] = '.';ind++;
+            storeData(ptr->dst2);send_data[ind] = '.';ind++;
+            storeData(ptr->dst3);send_data[ind] = '.';ind++;
+            storeData(ptr->dst4);send_data[ind] = ':';ind++;
+            storeData(ptr->data);send_data[ind] = '\n';ind++;
         }
         else if (strcmp(required_filer , "filter:star") == 0 &&
         (ptr->src1 == required_IP[0] && ptr->src3 == required_IP[1] && ptr->src3 == required_IP[2]) ||
         (ptr->dst1 == required_IP[0] && ptr->dst2 == required_IP[1] && ptr->dst3 == required_IP[2]) )
         {
-            storeData(ptr->src1);send_data[++ind] = '.';
-            storeData(ptr->src2);send_data[++ind] = '.';
-            storeData(ptr->src3);send_data[++ind] = '.';
-            storeData(ptr->src4);send_data[++ind] = '-';send_data[++ind] = '>';
-            storeData(ptr->dst1);send_data[++ind] = '.';
-            storeData(ptr->dst2);send_data[++ind] = '.';
-            storeData(ptr->dst3);send_data[++ind] = '.';
-            storeData(ptr->dst4);send_data[++ind] = ':';
-            storeData(ptr->data);send_data[++ind] = '\n';
+            storeData(ptr->src1);send_data[ind] = '.';ind++;
+            storeData(ptr->src2);send_data[ind] = '.';ind++;
+            storeData(ptr->src3);send_data[ind] = '.';ind++;
+            storeData(ptr->src4);send_data[ind] = '-';ind++;send_data[ind] = '>';ind++;
+            storeData(ptr->dst1);send_data[ind] = '.';ind++;
+            storeData(ptr->dst2);send_data[ind] = '.';ind++;
+            storeData(ptr->dst3);send_data[ind] = '.';ind++;
+            storeData(ptr->dst4);send_data[ind] = ':';ind++;
+            storeData(ptr->data);send_data[ind] = '\n';ind++;
         }
         else if (strcmp(required_filer , "filter:full") == 0 &&
         (ptr->src1 == required_IP[0] && ptr->src3 == required_IP[1] &&
@@ -153,15 +153,15 @@ void sendList() {
         (ptr->dst1 == required_IP[0] && ptr->dst2 == required_IP[1] &&
           ptr->dst3 == required_IP[2] && ptr->dst4 == required_IP[3]) )
         {
-            storeData(ptr->src1);send_data[++ind] = '.';
-            storeData(ptr->src2);send_data[++ind] = '.';
-            storeData(ptr->src3);send_data[++ind] = '.';
-            storeData(ptr->src4);send_data[++ind] = '-';send_data[++ind] = '>';
-            storeData(ptr->dst1);send_data[++ind] = '.';
-            storeData(ptr->dst2);send_data[++ind] = '.';
-            storeData(ptr->dst3);send_data[++ind] = '.';
-            storeData(ptr->dst4);send_data[++ind] = ':';
-            storeData(ptr->data);send_data[++ind] = '\n';
+            storeData(ptr->src1);send_data[ind] = '.';ind++;
+            storeData(ptr->src2);send_data[ind] = '.';ind++;
+            storeData(ptr->src3);send_data[ind] = '.';ind++;
+            storeData(ptr->src4);send_data[ind] = '-';ind++;send_data[ind] = '>';ind++;
+            storeData(ptr->dst1);send_data[ind] = '.';ind++;
+            storeData(ptr->dst2);send_data[ind] = '.';ind++;
+            storeData(ptr->dst3);send_data[ind] = '.';ind++;
+            storeData(ptr->dst4);send_data[ind] = ':';ind++;
+            storeData(ptr->data);send_data[ind] = '\n';ind++;
         }
         printf("(%d.%d.%d.%d) ->",ptr->src1,ptr->src2,ptr->src3,ptr->src4);
         printf("(%d.%d.%d.%d) : %d\n",ptr->dst1,ptr->dst2,ptr->dst3,ptr->dst4,ptr->data);
