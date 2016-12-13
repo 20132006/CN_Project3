@@ -46,8 +46,36 @@ int main(int argc, char** argv)
     double last_update;
     double clock_time;
     char send_data[2048];
-    memset(send_data, 0, sizeof (send_data));;
+
     int i,n=10,len;
+    for (i=0;i<2048;i++)
+      send_data[i]='\0';
+    for (i=0;i<n;i++)
+    {
+        send_data[i] = 48+1;
+    }
+    send_data[i] = '\n';
+    i++;
+    for (;i<n+n+1;i++)
+    {
+        send_data[i] = 1;
+    }
+    printf("%s\n", send_data);
+    for (i=0;i<2048;i++)
+      send_data[i]='\0';
+    for (i=0;i<n;i++)
+    {
+        send_data[i] = 48+1;
+    }
+    send_data[i] = '\n';
+    i++;
+    for (;i<n+n+1;i++)
+    {
+        send_data[i] = 1;
+    }
+    printf("%s\n", send_data);
+    for (i=0;i<2048;i++)
+      send_data[i]='\0';
     for (i=0;i<n;i++)
     {
         send_data[i] = 48+1;

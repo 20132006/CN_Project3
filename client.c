@@ -76,7 +76,8 @@ void storeData(int num)
     int k=0;
     int i;
     char temp[30];
-    memset(temp, 0, sizeof (temp));
+    for (i=0;i<30;i++)
+      temp[i] = '\0';
     while (num>0)
     {
         temp[++k] = (num%10)+48;
@@ -96,7 +97,8 @@ void sendList() {
     ind = 0;
     struct node *ptr = head;
 
-    memset(send_data, 0, sizeof (send_data));
+    for (i=0;i<2048;i++)
+      send_data[i] = '\0';
     //start from the beginning
     printf("%s\n", required_filer);
 
