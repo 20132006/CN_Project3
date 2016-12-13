@@ -78,6 +78,7 @@ void storeData(int num)
     char temp[30];
     for (i=0;i<30;i++)
       temp[i] = '\0';
+    printf("Num to be stored%d\n", num);
     while (num>0)
     {
         temp[++k] = (num%10)+48;
