@@ -134,7 +134,7 @@ void sendList() {
             storeData(ptr->data);send_data[ind] = '\n';ind++;
         }
         else if (strcmp(required_filer , "filter:star") == 0 &&
-        ((ptr->src1 == required_IP[0] && ptr->src3 == required_IP[1] && ptr->src3 == required_IP[2]) ||
+        ((ptr->src1 == required_IP[0] && ptr->src2 == required_IP[1] && ptr->src3 == required_IP[2]) ||
         (ptr->dst1 == required_IP[0] && ptr->dst2 == required_IP[1] && ptr->dst3 == required_IP[2])) )
         {
             storeData(ptr->src1);send_data[ind] = '.';ind++;
@@ -148,7 +148,7 @@ void sendList() {
             storeData(ptr->data);send_data[ind] = '\n';ind++;
         }
         else if (strcmp(required_filer , "filter:full") == 0 &&
-        ((ptr->src1 == required_IP[0] && ptr->src3 == required_IP[1] && ptr->src3 == required_IP[2] && ptr->src4 == required_IP[3]) ||
+        ((ptr->src1 == required_IP[0] && ptr->src2 == required_IP[1] && ptr->src3 == required_IP[2] && ptr->src4 == required_IP[3]) ||
         (ptr->dst1 == required_IP[0] && ptr->dst2 == required_IP[1] && ptr->dst3 == required_IP[2] && ptr->dst4 == required_IP[3])) )
         {
             storeData(ptr->src1);send_data[ind] = '.';ind++;
