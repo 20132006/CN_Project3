@@ -36,7 +36,7 @@ void *Rhandler(void *unused)
     //Get the socket descriptor
     while (1)
     {
-        printf("Start receiving\n");
+        //printf("Start receiving\n");
         bytes_recieved = recv(connected,recv_data,2048,0);
 
         recv_data[bytes_recieved] = '\0';
@@ -49,9 +49,9 @@ void *Rhandler(void *unused)
 
         else
         {
-            printf("---------------------------------------------------------\n");
+            printf("----------------------------------------\n");
             printf("%s",recv_data);
-            printf("---------------------------------------------------------\n\n");
+            printf("----------------------------------------\n\n");
         }
         fflush(stdout);
     }
@@ -63,7 +63,7 @@ void *Shandler(void *unused)
     //Get the socket descriptor
     while (1)
     {
-        printf("\n SEND (q or Q to quit) : ");
+        //printf("\n SEND (q or Q to quit) : ");
         gets(send_data);
 
         if (strcmp(send_data , "q") == 0 || strcmp(send_data , "Q") == 0)

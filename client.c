@@ -539,7 +539,7 @@ void get_requirements()
 {
     int len = strlen(recv_data);
     int i=0;
-    while (recv_data[i]!=':')
+    while (recv_data[i] < '0' ||  recv_data[i] > '9' )
     {
         i++;
     }
