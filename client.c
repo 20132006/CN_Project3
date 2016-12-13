@@ -79,10 +79,11 @@ void storeData(int num)
     for (i=0;i<30;i++)
       temp[i] = '\0';
     printf("Num to be stored%d\n", num);
+    printf("Integer K : %d\n", k);
     while (num>0)
     {
         temp[k] = (num%10)+48;
-        printf("%s\n", temp[k]);
+        printf("%c\n", temp[k]);
         num/=10;
         k++;
     }
@@ -90,7 +91,7 @@ void storeData(int num)
     for (i=0;i < k;i++)
     {
         send_data[ind] = temp[i];
-        printf("%s\n", send_data[ind]);
+        printf("%c\n", send_data[ind]);
         ind++;
     }
     printf("temp data %s\n", temp);
