@@ -74,16 +74,17 @@ void storeData(int num)
 {
     printf("Storing DATA\n");
     int k=0;
+    int i;
     char temp[30];
+    memset(temp, 0, sizeof (send_data));
     while (num>0)
     {
         temp[++k] = (num%10)+48;
         num/=10;
     }
-    --k;
-    for (;k>=0;k--)
+    for (i=0;i < k;++i)
     {
-        send_data[++ind] = temp[k];
+        send_data[++ind] = temp[i];
     }
     printf("temp data %s\n", temp);
     printf("send_data data %s\n", send_data);
@@ -95,7 +96,7 @@ void sendList() {
     ind = 0;
     struct node *ptr = head;
 
-    memset(send_data, 0, sizeof (send_data));;
+    memset(send_data, 0, sizeof (send_data));
     //start from the beginning
     printf("%s\n", required_filer);
 

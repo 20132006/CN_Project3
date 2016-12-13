@@ -50,13 +50,13 @@ int main(int argc, char** argv)
     int i,n=10,len;
     for (i=0;i<n;i++)
     {
-        send_data[i] = '1';
+        send_data[i] = 48+1;
     }
     send_data[i] = '\n';
     i++;
     for (;i<n+n+1;i++)
     {
-        send_data[i] = '1';
+        send_data[i] = 1;
     }
     printf("%s\n", send_data);
 
