@@ -555,7 +555,6 @@ void get_requirements()
         }
         i++;
     }
-    ++i;
     if (recv_data[i]=='*')
     {
         strcpy(required_filer,"filter:star");
