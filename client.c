@@ -45,7 +45,7 @@ int required_IP[4];
 int sock;
 char send_data[2048];
 char recv_data[1024];
-
+double clock_time;
 int ind;
 pthread_mutex_t sendReceiveMutex;
 
@@ -107,6 +107,7 @@ void sendList() {
     for (i=0;i<2048;i++)
       send_data[i] = '\0';
     //start from the beginning
+
     printf("%s\n", required_filer);
 
     printf("src1 , required_IP[0] %d , %d\n", ptr->src1, required_IP[0]);
@@ -401,24 +402,24 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
         }
     }
     pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
-    double clock_time = clock();
+    double local_clock = clock_time;
     if (first_update)
     {
-        last_update = clock_time;
+        last_update = local_clock;
         first_update = 0;
     }
     else if (!first_update)
     {
-        double time_spent = (double)(clock_time - last_update);
+        double time_spent = (double)(local_clock - last_update);
         printf("%f\n", time_spent);
-        if (time_spent >= 5000)
+        if (time_spent >= 60000000)
         {
             sendList();
             while (!isEmpty())
             {
                 deleteFirst();
             }
-            last_update = clock_time;
+            last_update = local_clock;
         }
 
     }
@@ -588,7 +589,12 @@ void *connection_handler(void *unused)
             close(sock);
             break;
         }
-        else if (bytes_recieved != 0)
+        else if (bytes_recieved < 5)
+        {
+            close(sock);
+            break;
+        }
+        else
         {
             pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
             get_requirements();
@@ -668,39 +674,12 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    while (1)
+    {
+      clock_time = clock();
+    }
 
     pthread_join(idPcapThread, NULL);
     pthread_join(idConnectionThread, NULL);
-
-    /*
-    while(1)
-    {
-        bytes_recieved=recv(sock,recv_data,1024,0);
-        recv_data[bytes_recieved] = '\0';
-
-        if (strcmp(recv_data , "q") == 0 || strcmp(recv_data , "Q") == 0)
-        {
-            close(sock);
-            break;
-        }
-
-        else
-            printf("\nRecieved data = %s " , recv_data);
-
-        printf("\nSEND (q or Q to quit) : ");
-        gets(send_data);
-
-        if (strcmp(send_data , "q") != 0 && strcmp(send_data , "Q") != 0)
-            send(sock,send_data,strlen(send_data), 0);
-
-        else
-        {
-            send(sock,send_data,strlen(send_data), 0);
-            close(sock);
-            break;
-        }
-    }
-    */
-    //pthread_join();
     return 0;
 }

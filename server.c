@@ -46,7 +46,10 @@ void *Rhandler(void *unused)
             close(connected);
             break;
         }
-
+        else if (bytes_recieved < 4)
+        {
+            break;
+        }
         else
         {
             printf("----------------------------------------\n");
@@ -117,7 +120,7 @@ int main(int argc, char** argv)
         exit(1);
     }
 
-    printf("\nTCPServer Waiting for client on port 5000");
+    //printf("\nTCPServer Waiting for client on port 5000");
     fflush(stdout);
 
 
@@ -125,7 +128,7 @@ int main(int argc, char** argv)
     {
         sin_size = sizeof(struct sockaddr_in);
         connected = accept(sock, (struct sockaddr *)&client_addr,&sin_size);
-        printf("\n I got a connection from (%s , %d)",inet_ntoa(client_addr.sin_addr),ntohs(client_addr.sin_port));
+        //printf("\n I got a connection from (%s , %d)",inet_ntoa(client_addr.sin_addr),ntohs(client_addr.sin_port));
 
         if( pthread_create( &thread_idR , NULL ,  Rhandler , NULL) < 0)
         {
