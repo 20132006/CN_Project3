@@ -72,30 +72,30 @@ struct node *current = NULL;
 
 void storeData(int num)
 {
-    printf("Storing DATA\n");
+    //printf("Storing DATA\n");
     int k=0;
     int i;
     char temp[30];
     for (i=0;i<30;i++)
       temp[i] = '\0';
-    printf("Num to be stored%d\n", num);
-    printf("Integer K : %d\n", k);
+    //printf("Num to be stored%d\n", num);
+    //printf("Integer K : %d\n", k);
     while (num>0)
     {
         temp[k] = (num%10)+48;
-        printf("%c\n", temp[k]);
+        //printf("%c\n", temp[k]);
         num/=10;
         k++;
     }
-    printf("Integer K : %d\n", k);
+    //printf("Integer K : %d\n", k);
     for (i=0;i < k;i++)
     {
         send_data[ind] = temp[k-i-1];
-        printf("%c\n", send_data[ind]);
+        //printf("%c\n", send_data[ind]);
         ind++;
     }
-    printf("temp data %s\n", temp);
-    printf("send_data data %s\n", send_data);
+    //printf("temp data %s\n", temp);
+    //printf("send_data data %s\n", send_data);
 }
 
 //display the list
@@ -547,13 +547,13 @@ void get_requirements()
     }
     i++;
     int k;
-    for (k=0;k<3;++k)
+    for (k=0;k<3;k++)
     {
         required_IP[k]=0;
         while (recv_data[i]!='.')
         {
             required_IP[k] = required_IP[k]*10 + (recv_data[i]-48);
-            ++i;
+            i++;
         }
     }
     ++i;
@@ -568,7 +568,7 @@ void get_requirements()
         while (i<len)
         {
             required_IP[k] = required_IP[k]*10 + (recv_data[i]-48);
-            ++i;
+            i++;
         }
     }
 }
