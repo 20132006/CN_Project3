@@ -668,6 +668,6 @@ int main(int argc, char** argv)
         }
     }
     */
-    pthread_join();
+    //pthread_join();
     return 0;
 }
