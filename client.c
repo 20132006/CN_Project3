@@ -94,6 +94,18 @@ void sendList() {
 
     memset(send_data, 0, sizeof (send_data));;
     //start from the beginning
+    printf("%s\n", required_filer);
+
+    printf("src1 , required_IP[0] %d , %d\n", ptr->src1, required_IP[0]);
+    printf("src2 , required_IP[1] %d , %d\n", ptr->src2, required_IP[1]);
+    printf("src3 , required_IP[2] %d , %d\n", ptr->src3, required_IP[2]);
+    printf("src4 , required_IP[3] %d , %d\n", ptr->src4, required_IP[3]);
+
+    printf("dst1 , required_IP[0] %d , %d\n", ptr->dst1, required_IP[0]);
+    printf("dst2 , required_IP[1] %d , %d\n", ptr->dst2, required_IP[1]);
+    printf("dst3 , required_IP[2] %d , %d\n", ptr->dst3, required_IP[2]);
+    printf("dst4 , required_IP[3] %d , %d\n", ptr->dst4, required_IP[3]);
+
     while(ptr != NULL)
     {
         if (strcmp(required_filer , "filter:all") == 0)
