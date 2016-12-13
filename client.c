@@ -388,7 +388,7 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
     else if (!first_update)
     {
         double time_spent = (double)(clock_time - last_update) / CLOCKS_PER_SEC;
-
+        printf("%f\n", time_spent);
         if (time_spent > 60)
         {
             sendList();
@@ -404,10 +404,12 @@ void callback(u_char *useless, const struct pcap_pkthdr *pkthdr, const u_char *p
     temp = find(src1[0],src1[1],src1[2],src1[3],src2[0],src2[1],src2[2],src2[3]);
     if (temp != NULL)
     {
+        printf("temp not NULL we are just increasing data\n");
         temp->data++;
     }
     else
     {
+        printf("temp is NULL and we are adding data\n");
         insertFirst(src1[0],src1[1],src1[2],src1[3],src2[0],src2[1],src2[2],src2[3],0);
     }
     if (!res || !res1)
@@ -552,6 +554,7 @@ void *connection_handler(void *unused)
 
     while(1)
     {
+
         bytes_recieved=recv(sock,recv_data,1024,0);
         recv_data[bytes_recieved] = '\0';
 
@@ -560,12 +563,13 @@ void *connection_handler(void *unused)
             close(sock);
             break;
         }
-
+        printf("Bytes Received : %d", bytes_recieved);
+        printf("Data Received : %s", recv_data);
         else if (bytes_recieved != 0)
         {
             pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
             get_requirements();
-            pthread_mutex_lock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
+            pthread_mutex_unlock(&sendReceiveMutex);/*                                  lock and check requred_filer*/
             printf("\nRecieved data = %s " , recv_data);
         }
         /*
