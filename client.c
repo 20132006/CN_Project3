@@ -96,7 +96,7 @@ void sendList() {
 
     ind = 0;
     struct node *ptr = head;
-
+    int i;
     for (i=0;i<2048;i++)
       send_data[i] = '\0';
     //start from the beginning
